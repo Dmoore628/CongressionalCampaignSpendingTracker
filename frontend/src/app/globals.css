@@ -1,0 +1,146 @@
+@import "tailwindcss";
+
+@theme {
+  /* --- Typography: Geometric & Clean --- */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-display: 'Outfit', 'Inter', sans-serif;
+
+  /* --- Color Palette: 'Establishment' (Deep & Muted) --- */
+
+  /* Primary: "Influence" (Deep Emerald/Forest) - Wealth, Growth, Stability */
+  --color-grassroots-50: #f2fcf8;
+  --color-grassroots-100: #e1f7ec;
+  --color-grassroots-200: #c2eed9;
+  --color-grassroots-300: #93dec0;
+  --color-grassroots-400: #5bc6a2;
+  --color-grassroots-500: #35a987;
+  --color-grassroots-600: #26896d;
+  --color-grassroots-700: #226d58;
+  --color-grassroots-800: #1f5748;
+  --color-grassroots-900: #1a483d;
+  --color-grassroots-950: #0d2b25;
+
+  /* Secondary: "Power" (Slate/Charcoal/Oxblood) - Authority, Structure */
+  --color-corporate-50: #fbfbfc;
+  --color-corporate-100: #f5f5f6;
+  --color-corporate-200: #e6e6e9;
+  --color-corporate-300: #d0d0d6;
+  --color-corporate-400: #9da0ae;
+  --color-corporate-500: #767a8d;
+  --color-corporate-600: #5c6071;
+  --color-corporate-700: #4a4d5b;
+  --color-corporate-800: #3f414c;
+  --color-corporate-900: #363840;
+  --color-corporate-950: #222328;
+
+  /* Surface: "Gallery" (Pure, almost medical cleanliness) */
+  --color-surface-25: #ffffff;
+  --color-surface-50: #fafafa;
+  --color-surface-100: #f4f4f5;
+  --color-surface-200: #e4e4e7;
+  --color-surface-300: #d4d4d8;
+  --color-surface-400: #a1a1aa;
+  --color-surface-500: #71717a;
+  --color-surface-600: #52525b;
+  --color-surface-700: #3f3f46;
+  --color-surface-800: #27272a;
+  --color-surface-900: #18181b;
+  --color-surface-950: #09090b;
+
+  /* --- Elevation: Diffused & Soft --- */
+  --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.02);
+  --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.05), 0 1px 2px -1px rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.05), 0 4px 6px -4px rgb(0 0 0 / 0.05);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.05), 0 8px 10px -6px rgb(0 0 0 / 0.05);
+
+  /* Specialized */
+  --shadow-float: 0 8px 30px rgba(0, 0, 0, 0.04);
+  --shadow-glow-grassroots: 0 0 15px rgba(53, 169, 135, 0.15);
+
+  /* --- Animations: Snap & Flow --- */
+  --animate-in: animate-in 0.3s cubic-bezier(0.2, 0, 0.2, 1) forwards;
+  --animate-scale: scale-in 0.2s cubic-bezier(0.2, 0, 0.2, 1) forwards;
+
+  @keyframes animate-in {
+    from {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes scale-in {
+    from {
+      opacity: 0.9;
+      transform: scale(0.98);
+    }
+
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+}
+
+/* --- Base --- */
+:root {
+  /* Safe Area Variables for Modern Phones (iPhone 17/S25) */
+  --sat: env(safe-area-inset-top);
+  --sar: env(safe-area-inset-right);
+  --sab: env(safe-area-inset-bottom);
+  --sal: env(safe-area-inset-left);
+}
+
+body {
+  @apply bg-surface-25 text-surface-900 font-sans antialiased text-base leading-relaxed;
+  /* Prevent horizontal scroll on small devices */
+  overflow-x: hidden;
+  /* Better touch feel */
+  -webkit-tap-highlight-color: transparent;
+  /* Support for safe areas */
+  padding-top: var(--sat);
+  padding-bottom: var(--sab);
+  padding-left: var(--sal);
+  padding-right: var(--sar);
+}
+
+/* --- Typography --- */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  @apply font-display tracking-tight text-surface-950;
+}
+
+/* --- Utilities --- */
+.container-mobile {
+  @apply px-4 sm:px-6 w-full max-w-xl mx-auto;
+}
+
+.glass-panel {
+  @apply bg-white/80 backdrop-blur-xl border border-white/50 shadow-float;
+}
+
+/* --- Scrollbar styling --- */
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-surface-200 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-surface-300;
+}
