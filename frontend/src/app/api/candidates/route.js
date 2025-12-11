@@ -23,28 +23,28 @@ export async function GET() {
         let data = await fetchAllCandidates(2026);
 
         // Filter by Filing Window
-        data = data.filter(c => {
-            // 1. Presidential Filter (2028 cycle not started)
-            if (c.office === 'P') return false;
-
-            // 2. State Filing Period Filter
-            // If the state is not in our known list of "Active or Recently Closed" windows, 
-            // valid interpretation is either "Not yet started" or "Unknown". 
-            // For now, we only show what we explicitly track as verifying activity.
-            const window = FILING_WINDOWS[c.state];
-            if (!window) return false;
-
-            const startDate = new Date(window.start);
-            const endDate = new Date(window.end);
-
-            // Adjust end date to cover the full day if needed, or stick to strict date object comparison.
-            // Adding 1 day to end date to ensure the "end date" is inclusive of that whole day effectively?
-            // Or just trust the API dates vs current time. 
-            // Simple check:
-            const isActive = NOW >= startDate && NOW <= endDate;
-
-            return isActive;
-        });
+        // data = data.filter(c => {
+        //     // 1. Presidential Filter (2028 cycle not started)
+        //     if (c.office === 'P') return false;
+        //
+        //     // 2. State Filing Period Filter
+        //     // If the state is not in our known list of "Active or Recently Closed" windows, 
+        //     // valid interpretation is either "Not yet started" or "Unknown". 
+        //     // For now, we only show what we explicitly track as verifying activity.
+        //     const window = FILING_WINDOWS[c.state];
+        //     if (!window) return false;
+        //
+        //     const startDate = new Date(window.start);
+        //     const endDate = new Date(window.end);
+        //
+        //     // Adjust end date to cover the full day if needed, or stick to strict date object comparison.
+        //     // Adding 1 day to end date to ensure the "end date" is inclusive of that whole day effectively?
+        //     // Or just trust the API dates vs current time. 
+        //     // Simple check:
+        //     const isActive = NOW >= startDate && NOW <= endDate;
+        //
+        //     return isActive;
+        // });
 
         return NextResponse.json(data);
     } catch (error) {
