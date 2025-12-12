@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server';
 import { fetchAllCandidates } from '@/lib/api-service';
 
+export const dynamic = 'force-dynamic'; // Ensure this runs on every request (serverless compatible)
+export const revalidate = 0; // Disable static caching
+
 export async function GET() {
     try {
         // FILING PERIOD CONFIGURATION
