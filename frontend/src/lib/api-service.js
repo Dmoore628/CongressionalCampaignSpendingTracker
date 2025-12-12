@@ -62,45 +62,63 @@ export async function fetchAllCandidates(cycle = 2026) {
 
     // 2. FETCH FROM API
     let allCandidates = [];
-    const MAX_PAGES = 200; // Covers ~20000 candidates
-    const BATCH_SIZE = 5; // Fetch 5 pages at a time
+    const MAX_PAGES = 100; // Limit to 100 pages (~10k candidates) to avoid Vercel timeouts
+    const BATCH_SIZE = 10; // Increase concurrency
 
     console.log("Starting Live Fetch from FEC API...");
+    const timeoutPromise = new Promise(resolve => setTimeout(() => resolve('TIMEOUT'), 8500)); // 8.5s Safety Margin
 
-    for (let i = 1; i <= MAX_PAGES; i += BATCH_SIZE) {
-        const batch = [];
-        for (let j = 0; j < BATCH_SIZE; j++) {
-            const pageNum = i + j;
-            if (pageNum > MAX_PAGES) break;
+    try {
+        for (let i = 1; i <= MAX_PAGES; i += BATCH_SIZE) {
+            const batchStart = Date.now();
 
-            batch.push(
-                axios.get(`${BASE_URL}/candidates/totals/`, {
-                    params: {
-                        api_key: API_KEY,
-                        cycle,
-                        page: pageNum,
-                        per_page: 100,
-                        sort: '-receipts',
-                        election_full: true
-                    }
-                }).then(res => res.data.results || []).catch(err => {
-                    console.error(`Failed page ${pageNum}`, err.message);
-                    return [];
-                })
-            );
+            // Check if we are running out of time
+            if (Date.now() - batchStart > 8000) break;
+
+            const batch = [];
+            for (let j = 0; j < BATCH_SIZE; j++) {
+                const pageNum = i + j;
+                if (pageNum > MAX_PAGES) break;
+
+                batch.push(
+                    axios.get(`${BASE_URL}/candidates/totals/`, {
+                        params: {
+                            api_key: API_KEY,
+                            cycle,
+                            page: pageNum,
+                            per_page: 100,
+                            sort: '-receipts',
+                            election_full: true
+                        },
+                        timeout: 5000 // Individual request timeout
+                    }).then(res => res.data.results || []).catch(err => {
+                        console.error(`Failed page ${pageNum}`, err.message);
+                        return [];
+                    })
+                );
+            }
+
+            // Race against global timeout
+            const result = await Promise.race([Promise.all(batch), timeoutPromise]);
+
+            if (result === 'TIMEOUT') {
+                console.warn("[FETCH] Hit Vercel Execution Timeout limit. Returning partial data.");
+                break;
+            }
+
+            let batchHasData = false;
+            result.forEach(r => {
+                if (r.length > 0) batchHasData = true;
+                allCandidates = allCandidates.concat(r);
+            });
+
+            if (!batchHasData) {
+                console.log(`[FETCH] No more data found at batch ending page ${i + BATCH_SIZE - 1}. Stopping.`);
+                break;
+            }
         }
-
-        const results = await Promise.all(batch);
-        let batchHasData = false;
-        results.forEach(r => {
-            if (r.length > 0) batchHasData = true;
-            allCandidates = allCandidates.concat(r);
-        });
-
-        if (!batchHasData) {
-            console.log(`[FETCH] No more data found at batch ending page ${i + BATCH_SIZE - 1}. Stopping.`);
-            break;
-        }
+    } catch (err) {
+        console.error("Fetch loop error:", err);
     }
 
     // 3. PROCESS & DEDUPLICATE
