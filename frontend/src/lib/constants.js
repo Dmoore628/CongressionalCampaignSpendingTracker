@@ -17,3 +17,9 @@ export const ABBR_TO_STATE = Object.entries(STATE_TO_ABBR).reduce((acc, [key, va
     acc[value] = key.replace(/\b\w/g, l => l.toUpperCase());
     return acc;
 }, {});
+
+export const OFFICE_LABELS = {
+    'P': 'President',
+    'S': 'US Senate',
+    'H': 'US House'
+};

@@ -189,7 +189,7 @@ export default function Home() {
                         Campaign<span className="text-grassroots-600">Tracker</span>
                     </h1>
                     <p className="text-surface-500 text-base font-medium mb-6 animate-in opacity-0" style={{ animationDelay: '100ms' }}>
-                        Follow the money. Secure the future.
+                        Track 2026 US Congress (Senate & House) Elections
                     </p>
 
                     <div className="animate-in opacity-0" style={{ animationDelay: '150ms' }}>

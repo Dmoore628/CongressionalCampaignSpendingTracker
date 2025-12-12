@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { ChevronRight } from 'lucide-react';
+import { OFFICE_LABELS } from '@/lib/constants';
 
 export function CandidateCard({ candidate }) {
     const isEligible = candidate.is_eligible;
@@ -10,6 +11,8 @@ export function CandidateCard({ candidate }) {
         notation: "compact",
         maximumFractionDigits: 1
     }).format(candidate.total_funding);
+
+    const officeLabel = OFFICE_LABELS[candidate.office] || candidate.office;
 
     return (
         <Link href={`/candidate/${candidate.id}`} className="block group">
@@ -49,7 +52,7 @@ export function CandidateCard({ candidate }) {
                                         'bg-yellow-500'}
                             `} />
                             <span className="truncate">
-                                {candidate.party} • {candidate.state}-{candidate.district || 'AL'}
+                                {candidate.party} • {officeLabel} • {candidate.state}-{candidate.district || 'AL'}
                             </span>
                         </div>
                     </div>

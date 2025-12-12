@@ -86,36 +86,32 @@ export default function CandidateDetail() {
                             </div>
                         </div>
 
+                        import {OFFICE_LABELS} from '@/lib/constants';
+
+                        // ... (inside component) ...
+
                         <div className="flex items-start">
                             <div className="min-w-[24px]"><Building2 className="w-4 h-4 text-slate-400 mt-0.5" /></div>
                             <div>
                                 <p className="text-xs text-slate-400 font-medium uppercase">Running For</p>
-                                <p className="text-slate-900 font-medium">{candidate.office_full || candidate.office}</p>
-                            </div>
-                        </div>
-
-                        <div className="flex items-start">
-                            <div className="min-w-[24px]"><MapPin className="w-4 h-4 text-slate-400 mt-0.5" /></div>
-                            <div>
-                                <p className="text-xs text-slate-400 font-medium uppercase">District</p>
                                 <p className="text-slate-900 font-medium">
-                                    {candidate.state} {candidate.district ? `- District ${candidate.district}` : '(Statewide)'}
+                                    {OFFICE_LABELS[candidate.office] || candidate.office_full || candidate.office}
                                 </p>
                             </div>
                         </div>
+
+// ... (further down) ...
+
+                        {/* Source Button */}
+                        <a
+                            href={`https://www.fec.gov/data/candidate/${candidate.id}`}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="flex items-center justify-center w-full p-4 bg-white border border-slate-200 text-slate-600 font-semibold rounded-xl hover:bg-slate-50 transition-colors"
+                        >
+                            View Official FEC Filing <ExternalLink className="w-4 h-4 ml-2 opacity-50" />
+                        </a>
                     </div>
                 </div>
-
-                {/* Source Button */}
-                <a
-                    href={`https://www.fec.gov/data/candidate/${candidate.id}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center justify-center w-full p-4 bg-white border border-slate-200 text-slate-600 font-semibold rounded-xl hover:bg-slate-50 transition-colors"
-                >
-                    View Official FEC Filing <ExternalLink className="w-4 h-4 ml-2 opacity-50" />
-                </a>
-            </div>
-        </div>
-    );
+                );
 }
